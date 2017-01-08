@@ -1,0 +1,112 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="/javascripts/jquery/dist/jquery.min.js")
+    script(src="/javascripts/moment/min/moment.min.js")
+    script(src="/javascripts/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
+
+  body
+    nav(class="navbar navbar-default")
+      div(class="container-fluid")
+        div(class="navbar-header")
+          button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false")
+            span(class="sr-only") Toggle navigation
+            span(class="icon-bar")
+            span(class="icon-bar")
+            span(class="icon-bar")
+          <a class="navbar-brand" href="#">Exam3</a>
+        div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+          ul(class="nav navbar-nav")
+            li(class="active")
+              a(href="#") Home
+                span(class="sr-only")(current)
+            li
+              a(href="#") About
+    block content
+
+  script(src='/socket.io/socket.io.js')
+  script.
+    console.log($.notify, 'this is notify')
+    function updateDom(data) {
+      console.log(data, 'this is inside the dom function');
+      notify('New issue from ' + data.sender.login, data.issue.title, data.issue.html_url);
+      $('#issue-list').prepend('<div id="'+data.issue.id+'" class="media"> <div class= "media-left" ><a href= "'+ data.sender.html_url+'" ><img class= "media-object" src="'+ data.sender.avatar_url +'" height="64"> </a> </div><div class = "media-body"><a href="'+ data.user.avatar_url +'" <h4 class= "media-heading"> '+data.issue.title +' </h4 ><span>'+data.issue.body+'</span><p> Created: '+ data.issue.created_at +'| Last Update: '+ data.issue.updated_at + ' | Comment <span id="comment"> '+ data.issue.comments + '</span></p> </div> </div>');
+    }
+
+    function removeDom(data) {
+      notify(data.sender.login + ' closed ', data.issue.title, data.issue.html_url);
+      $('#'+data.issue.id).remove();
+    }
+
+    function addComment(issueData) {
+      notify(issueData.sender.login + ' commented on ', issueData.issue.title, issueData.issue.html_url);
+      $('#'+ issueData.issue.id).find('span#comment').text(1 + parseInt($('#'+ issueData.issue.id).find('span#comment').text()))
+    }
+
+    function notify(title, message, url) {
+      $.notify({
+        // options
+        icon: 'glyphicon glyphicon-bell',
+        title: title,
+        message: '<br>' + message,
+        url: url,
+        target: '_blank'
+      }, {
+        // settings
+        element: 'body',
+        position: null,
+        type: "success",
+        allow_dismiss: true,
+        newest_on_top: true,
+        showProgressbar: false,
+        placement: {
+          from: "top",
+          align: "right"
+        },
+        offset: 20,
+        spacing: 10,
+        z_index: 1031,
+        delay: 0,
+        timer: 1000,
+        url_target: '_blank',
+        mouse_over: null,
+        animate: {
+          enter: 'animated fadeInDown',
+          exit: 'animated fadeOutUp'
+        },
+        onShow: null,
+        onShown: null,
+        onClose: null,
+        onClosed: null,
+        icon_type: 'class',
+        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+        '<span data-notify="icon"></span> ' +
+        '<span data-notify="title">{1}</span> ' +
+        '<span data-notify="message">{2}</span>' +
+        '<div class="progress" data-notify="progressbar">' +
+        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+        '</div>' +
+        '<a href="{3}" target="{4}" data-notify="url"></a>' +
+        '</div>'
+      });
+
+    }
+
+    var socket = io.connect('https://69059a5f.ngrok.io/');
+    socket.on('new-issue', function (data) {
+      if(data.action ===  'opened' || data.action=== 'reopened') {
+        updateDom(data);
+      }
+      if (data.action ===  'created') {
+        addComment(data)
+      }
+
+      if (data.action === 'closed') {
+        removeDom(data);
+      }
+      console.log(data);
+    });

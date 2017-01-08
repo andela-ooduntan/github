@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    div(class="row")
+      div(class="container")
+        h1 List of issues on Riten repo
+        div(id="issue-list")
+          for data in issues
+            div(class="media" id="#{data.id}")
+              div(class="media-left")
+                a(href="#")
+                 img(class="media-object" height="64" src="#{data.user.avatar_url}" alt="#{data.user.avatar_url}")
+              div(class="media-body")
+                a(href="#{data.html_url}")
+                  h4(class="media-heading") #{data.title}
+                span #{data.body}
+                p Created: #{data.created_at} | Last Update: #{data.updated_at} | Comment:
+                  span(id="comment") #{data.comments}
