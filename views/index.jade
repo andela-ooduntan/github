@@ -6,13 +6,32 @@ block content
         h1 List of issues on Riten repo
         div(id="issue-list")
           for data in issues
-            div(class="media" id="#{data.id}")
-              div(class="media-left")
-                a(href="#")
-                 img(class="media-object" height="64" src="#{data.user.avatar_url}" alt="#{data.user.avatar_url}")
-              div(class="media-body")
-                a(href="#{data.html_url}")
-                  h4(class="media-heading") #{data.title}
-                span #{data.body}
-                p Created: #{data.created_at} | Last Update: #{data.updated_at} | Comment:
-                  span(id="comment") #{data.comments}
+            .card.card-1(id="#{data.id}")
+              .header
+                span #{data.title} 
+                p(class="commit-new")
+                  span(class="number") 0 
+                  span &nbsp new comment
+                p(class="commit-old")
+                  span(class="number-old") 0 
+                  span &nbsp deleted comment
+              div
+                p(class="message") #{data.body}
+                p(class="others")
+                  a(href="#{data.html_url}") #{data.html_url}
+                p(class="others") Number of comment: &nbsp
+                  span(class="commit-number") #{data.comments}
+                p(class="others") Date Created: #{data.created_at}
+                p(class="others") Date Updated: #{data.updated_at}
+
+          //- for data in issues
+          //-   div(class="media" id="#{data.id}")
+          //-     div(class="media-left")
+          //-       a(href="#")
+          //-        img(class="media-object" height="64" src="#{data.user.avatar_url}" alt="#{data.user.avatar_url}")
+          //-     div(class="media-body")
+          //-       a(href="#{data.html_url}")
+          //-         h4(class="media-heading") #{data.title}
+          //-       span #{data.body}
+          //-       p Created: #{data.created_at} | Last Update: #{data.updated_at} | Comment:
+          //-         span(id="comment") #{data.comments}

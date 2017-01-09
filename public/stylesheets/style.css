@@ -2,6 +2,56 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.card {
+  background: #f0f0f0;
+  border-radius: 2px;
+  display: inline-block;
+  height: 300px;
+  margin: 1rem;
+  position: relative;
+  width: 300px;
+  border: 1px solid #c4c4c4;
+
+}
+.header {
+
+    background-color: #c4c4c4;
+    padding: 2px 0px 0px 4px;
+    padding: 1px 0px 6px 4px;
+}
+.commit-new {
+  background-color: #4a9941;
+    color: #fff;
+    width: 45%;
+    padding: 0px 0px 0px 3px;
+    border-radius: 6px;
+    margin: 2px 0px 0px 0px;
+    display: none;
+}
+.commit-old {
+  background-color: orangered;
+    color: #fff;
+    width: 45%;
+    padding: 0px 0px 0px 3px;
+    border-radius: 6px;
+    margin: 2px 0px 0px 0px;
+    display: none;    
+}
+.link {
+  padding: 0px 0px 0px 5px;
+}
+.message {
+  padding: 8px 0px 0px 5px;
+}
+.others {
+  padding: 3px 0px 0px 5px;
+
+}
+.card-1 {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
 a {
   color: #00B7FF;
 }
